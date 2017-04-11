@@ -2,6 +2,10 @@
 
 #include <sqlite3.h>
 
+/**
+ * This is a cursor implementation that does all the
+ * processing of rows.
+ */
 class SqliteVirtualTableCursor : public sqlite3_vtab_cursor {
 public:
   virtual ~SqliteVirtualTableCursor() = default;

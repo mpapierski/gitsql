@@ -3,19 +3,23 @@
 GitVirtualTableCursor::GitVirtualTableCursor(git_repository *repository)
     : repository(repository) {
   assert(repository != nullptr);
+  // Creates a new walker instance in topological order
+  // starting from HEAD
   git_revwalk_new(&walker, repository);
   git_revwalk_sorting(walker, GIT_SORT_TOPOLOGICAL);
   git_revwalk_push_head(walker);
 }
+
 GitVirtualTableCursor::~GitVirtualTableCursor() {
   std::cout << "~GitVirtualTableCursor" << std::endl;
   git_revwalk_free(walker);
 }
+
 int GitVirtualTableCursor::filter(int, const char *, int, sqlite3_value **) {
   return next();
 }
-int GitVirtualTableCursor::next() {
 
+int GitVirtualTableCursor::next() {
   int err;
   git_oid oid;
   if ((err = git_revwalk_next(&oid, walker)) != 0) {
@@ -36,9 +40,9 @@ int GitVirtualTableCursor::next() {
     return SQLITE_ERROR;
   }
 
+  // Create a row out of a commit details
   values.clear();
-
-  // get git sha
+  // Get git sha
   char out[41] = {};
   git_oid_fmt(out, &oid);
   values.push_back(out);
@@ -52,11 +56,13 @@ int GitVirtualTableCursor::next() {
   currentRowId++;
   return SQLITE_OK;
 }
+
 int GitVirtualTableCursor::column(sqlite3_context *context, int N) {
   const auto &value = values.at(N);
-
   sqlite3_result_text(context, value.c_str(), -1, SQLITE_STATIC);
   return SQLITE_OK;
 }
+
 bool GitVirtualTableCursor::eof() { return currentRowId == -1; }
+
 int GitVirtualTableCursor::rowId() { return currentRowId; }

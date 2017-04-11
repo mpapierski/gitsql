@@ -25,11 +25,10 @@ message TEXT)
 )SQL");
   return std::make_unique<GitVirtualTable>(repository);
 }
+
 std::unique_ptr<SqliteVirtualTable>
 GitModule::connect(std::vector<std::string> args) {
-  for (auto arg : args) {
-    std::cout << "Connect argv=" << arg << std::endl;
-  }
+  /// XXX: Not sure if this is needed at all
   return std::make_unique<GitVirtualTable>(repository);
 }
 

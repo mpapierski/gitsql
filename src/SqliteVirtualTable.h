@@ -4,6 +4,10 @@
 #include <memory>
 #include <sqlite3.h>
 
+/**
+ * A virtual table object that extends the default
+ * sqlite3_vtab structure.
+ */
 class SqliteVirtualTable : public sqlite3_vtab {
 public:
   virtual ~SqliteVirtualTable() = default;
