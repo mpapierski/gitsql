@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SqliteModule.h"
 #include <iostream>
 #include <memory>
 #include <sqlite3.h>
@@ -24,6 +25,10 @@ public:
     return Query{query};
   }
   void exec(Query query);
+  void createModule(std::unique_ptr<SqliteModule> sqliteModule);
+  using Callback = std::function<bool(int, char **, char **)>;
+  void fetchRows(Query query, Callback callback);
+  void declareVTab(std::string statement);
 
 private:
   sqlite3 *db{nullptr};

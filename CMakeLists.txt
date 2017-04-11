@@ -5,5 +5,6 @@ set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 set (CMAKE_CXX_STANDARD 14)
 
 find_package (SQLite3 REQUIRED)
+find_package (Libgit2 REQUIRED)
 
 add_subdirectory (src)
